@@ -1,0 +1,54 @@
+{
+  "name": "wsl-terminal-image-paste",
+  "displayName": "WSL Terminal Image Paste",
+  "description": "在 Remote - WSL 终端中粘贴 Windows 剪贴板图片，保存后插入 Linux 路径并继续输入。",
+  "version": "0.1.0",
+  "publisher": "cacheqian",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/cacheqian/vs-vode-terminal-img-paste.git" },
+  "engines": { "vscode": "^1.99.0" },
+  "extensionKind": ["workspace"],
+  "categories": ["Other"],
+  "main": "./dist/extension.js",
+  "capabilities": { "untrustedWorkspaces": { "supported": false }, "virtualWorkspaces": false },
+  "contributes": {
+    "commands": [
+      { "command": "wslImagePaste.paste", "title": "WSL Image Paste: 粘贴图片路径" },
+      { "command": "wslImagePaste.openFolder", "title": "WSL Image Paste: 打开图片目录" },
+      { "command": "wslImagePaste.cleanup", "title": "WSL Image Paste: 手动清理图片" },
+      { "command": "wslImagePaste.diagnostics", "title": "WSL Image Paste: 查看诊断" }
+    ],
+    "keybindings": [{ "command": "wslImagePaste.paste", "key": "ctrl+alt+v", "when": "terminalFocus && !terminalIsFeatureTerminal" }],
+    "configuration": {
+      "title": "WSL Image Paste",
+      "properties": {
+        "wslImagePaste.storage": { "type": "string", "enum": ["global", "workspace"], "default": "global", "scope": "window", "description": "global：所有项目共用插件图片目录；workspace：保存到明确选择的工作区的 .terminal-images，不修改 .gitignore。" },
+        "wslImagePaste.pathStyle": { "type": "string", "enum": ["shell", "raw"], "default": "shell", "scope": "window", "description": "shell：为 Bash/Zsh 路径添加引号；raw：给自行解析路径的交互式 CLI 使用。两者均只插入路径和空格，不回车。" }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "vscode:prepublish": "npm run build",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src test --max-warnings 0",
+    "test": "vitest run",
+    "test:host": "node scripts/test-host.mjs",
+    "test:interop": "node scripts/test-interop.mjs",
+    "package": "node scripts/package.mjs",
+    "check": "npm run typecheck && npm run lint && npm test && npm run build"
+  },
+  "dependencies": { "sharp": "0.35.5" },
+  "devDependencies": {
+    "@eslint/js": "^9.39.0",
+    "@types/node": "^22.0.0",
+    "@types/vscode": "1.99.0",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^3.0.0",
+    "esbuild": "^0.25.0",
+    "eslint": "^9.39.0",
+    "typescript": "^5.9.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^3.2.0"
+  }
+}

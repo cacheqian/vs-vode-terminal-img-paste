@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.vscode-test/
+coverage/
+artifacts/
+*.vsix
+test-results/
